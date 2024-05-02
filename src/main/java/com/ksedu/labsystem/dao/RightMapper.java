@@ -14,4 +14,8 @@ import java.util.List;
 public interface RightMapper {
 //    @Select("select * from rights")
     public List<Right> getRightList();
+
+    void updateRightList(Right right);
+
+    void deleteRightList(Integer id);
 }

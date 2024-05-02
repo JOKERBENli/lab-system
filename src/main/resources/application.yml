@@ -8,5 +8,20 @@ spring:
     url: jdbc:mysql://localhost:3306/lab_system
     username: root
     password: 123456
+  main:
+    logging:
+      configuration: classpath:log4j2.yml
+
+  mvc:
+    static-path-pattern: /static/**
+
 mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml
+
+
+
+config:
+  jwt:
+    secret: xzj_any_code
+    expire: 3600
+    header: token

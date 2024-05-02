@@ -1,0 +1,72 @@
+Configuration:
+  status: warn  #日志级别 有高到低 ERROR、WARN、INFO、DEBUG、TRACE
+  monitorInterval: 30 #30秒检查一次
+  properties:
+    property:
+      - name: LOG_HOME
+        value: logs/
+      - name: FILE_NAME
+        value: test.log
+      - name: FILE_ERROR_NAME
+        value: test_error.log
+  Appenders:
+    Console: #控制台输出
+      name: Console
+      target: SYSTEM_OUT
+      PatternLayout: #输出格式
+        pattern: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+    #    File: #文件会打印出所有信息，这个log每次运行程序会自动清空，由append属性决定，这个也挺有用的，适合临时测试用
+    #      name: log
+    #      fileName: log/test.log
+    #      append: true
+    #      PatternLayout: #输出格式
+    #        pattern: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+    RollingFile:
+      - name: SYSTEMLOG #系统日志
+        fileName: ${LOG_HOME}${FILE_NAME}
+        filePattern: "${LOG_HOME}$${date:yyyy-MM}/${FILE_NAME}-%d{yyyy-MM-dd}-%i.log.gz"
+        PatternLayout:
+          pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+        Filters:
+          ThresholdFilter:  #过滤debug后的
+            level: DEBUG
+            onMatch: ACCEPT
+            onMismatch: DENY
+        Policies:
+          TimeBasedTriggeringPolicy: #按天分类
+            modulate: true
+            interval: 1
+          SizeBasedTriggeringPolicy: #文件大小
+            size: 300MB
+        DefaultRolloverStrategy: #目录下文件最多个数
+          max: 20
+      - name: ERRORLOG  #错误日志
+        fileName: ${LOG_HOME}${FILE_ERROR_NAME}
+        filePattern: "${LOG_HOME}$${date:yyyy-MM}/${FILE_ERROR_NAME}-%d{yyyy-MM-dd}-%i.log.gz"
+        PatternLayout:
+          pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+        Filters:
+          ThresholdFilter:  #过滤error后的
+            level: error
+            onMatch: ACCEPT
+            onMismatch: DENY
+        Policies:
+          TimeBasedTriggeringPolicy: #按天分类
+            modulate: true
+            interval: 1
+          SizeBasedTriggeringPolicy: #文件大小
+            size: 300MB
+        DefaultRolloverStrategy: #目录下文件最多个数
+          max: 20
+  Loggers:
+    Root:
+      level: info
+      AppenderRef:
+        ref: Console
+    Logger:
+      - name: com.weirdo.web
+        level: debug
+        AppenderRef:
+          - ref: CONSOLE
+          - ref: SYSTEMLOG
+          - ref: ERRORLOG

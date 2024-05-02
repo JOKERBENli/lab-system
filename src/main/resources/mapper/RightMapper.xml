@@ -27,5 +27,22 @@
         FROM rights
         WHERE parent_id=0
     </select>
+    
+    <update id="updateRightList">
+        UPDATE rights
+        <set>
+            <if test="title!=null">
+                title = #{title},
+            </if>
+            <if test="icon!=null">
+                icon = #{icon}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteRightList">
+        DELETE from rights WHERE id = #{id}
+    </delete>
 
 </mapper>

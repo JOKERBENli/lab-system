@@ -21,4 +21,14 @@ public class RightServiceImpl implements RightService{
     public List<Right> getRightList() {
         return rightMapper.getRightList();
     }
+
+    @Override
+    public void updateRightlist(Right right) {
+        rightMapper.updateRightList(right);
+    }
+
+    @Override
+    public void deleteRightList(Integer id) {
+        rightMapper.deleteRightList(id);
+    }
 }
