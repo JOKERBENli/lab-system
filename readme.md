@@ -149,7 +149,7 @@ Dockerfile配置
 FROM nginx
 # 作者
 MAINTAINER htt
-# 添加时区环境变量，亚洲，上海
+# 添加时区到环境变量，亚洲，上海
 ENV TimeZone=Asia/Shanghai
 # 将前端dist文件中的内容复制到nginx目录
 COPY dist  /usr/share/nginx/html/
